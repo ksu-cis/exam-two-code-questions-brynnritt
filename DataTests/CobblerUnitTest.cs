@@ -1,6 +1,7 @@
 using System;
 using ExamTwoCodeQuestions.Data;
 using Xunit;
+using System.ComponentModel;
 
 namespace ExamTwoCodeQuestions.DataTests
 {
@@ -15,6 +16,49 @@ namespace ExamTwoCodeQuestions.DataTests
             var cobbler = new Cobbler();
             cobbler.Fruit = fruit;
             Assert.Equal(fruit, cobbler.Fruit);
+        }
+
+        [Theory]
+        [InlineData(FruitFilling.Cherry)]
+        [InlineData(FruitFilling.Blueberry)]
+        [InlineData(FruitFilling.Peach)]
+        public void ChangingFruitPropertyShouldInvokePropertyChangedForFruit(FruitFilling filling)
+        {
+            var cobbler = new Cobbler();
+            Assert.PropertyChanged(cobbler, "Fruit", () =>
+            {
+                cobbler.Fruit = filling;
+            });
+        }
+
+        [Fact]
+        public void ChangingWithIceCreamPropertyShouldInvokePropertyChangedForWithIceCream()
+        {
+            var cobbler = new Cobbler();
+            Assert.PropertyChanged(cobbler, "WithIceCream", () =>
+            {
+                cobbler.WithIceCream = false;
+            });
+        }
+
+        [Fact]
+        public void ChangingCreamPropertyShouldInvokePropertyChangedForSpecialInstructions()
+        {
+            var cobbler = new Cobbler();
+            Assert.PropertyChanged(cobbler, "SpecialInstructions", () =>
+            {
+                cobbler.WithIceCream = true;
+            });
+        }
+
+        [Fact]
+        public void ChangingCreamPropertyShouldInvokePropertyChangedForPrice()
+        {
+            var cobbler = new Cobbler();
+            Assert.PropertyChanged(cobbler, "Price", () =>
+            {
+                cobbler.WithIceCream = true;
+            });
         }
 
         [Fact]
@@ -71,6 +115,13 @@ namespace ExamTwoCodeQuestions.DataTests
         {
             var cobbler = new Cobbler();
             Assert.IsAssignableFrom<IOrderItem>(cobbler);
+        }
+
+        [Fact]
+        public void ShouldImplementINotifyPropertyChangedInterface()
+        {
+            var cobbler = new Cobbler();
+            Assert.IsAssignableFrom<INotifyPropertyChanged>(cobbler);
         }
     }
 }
